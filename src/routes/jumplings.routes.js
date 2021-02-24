@@ -43,6 +43,16 @@ router.param("id", (req, res, next, id) => {
 });
 
 // ROUTES
+router.get("/presenter", (req, res) => {
+  const numberOfJumplings = jumplings.length;
+  if (!numberOfJumplings) {
+    res.status(200).send("No jumplings available...");
+  } else {
+    const randomNumber = Math.floor(Math.random() * numberOfJumplings);
+    res.status(200).send(jumplings[randomNumber]);
+  }
+});
+
 router.get("/", (req, res) => {
   res.status(200).send(jumplings);
 });

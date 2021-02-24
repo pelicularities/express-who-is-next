@@ -84,11 +84,3 @@ describe("/jumplings", () => {
     await request(app).delete("/jumplings/3141592654").expect(404);
   });
 });
-
-// describe("/jumplings/presenter", () => {
-//   it("should return a random jumpling", async () => {
-//     const { body: randomJumpling } = await request(app)
-//       .get("/jumplings/presenter")
-//       .expect(200);
-//   });
-// });
