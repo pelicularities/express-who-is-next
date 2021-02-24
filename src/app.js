@@ -1,6 +1,12 @@
 const express = require("express");
 const app = express();
 
+// ROUTERS
+const jumplingsRouter = require("./routes/jumplings.routes");
+
+app.use("/jumplings", jumplingsRouter);
+
+// ROUTES - ./
 app.get("/", (req, res) => {
   res.status(200).send({
     0: "GET    /",
