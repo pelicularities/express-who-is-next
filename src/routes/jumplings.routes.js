@@ -94,7 +94,7 @@ router.put("/:id", (req, res, next) => {
   }
 });
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", (req, res) => {
   const deletedJumpling = jumplings[req.jumplingIndex];
   jumplings.splice(req.jumplingIndex, 1);
   res.status(200).json(deletedJumpling);

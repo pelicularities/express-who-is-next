@@ -2,12 +2,12 @@ const request = require("supertest");
 const app = require("../src/app");
 
 describe("/jumplings", () => {
-  it("should respond correctly to GET when there are no jumplings", async () => {
+  it("should respond to GET with an empty array when there are no jumplings", async () => {
     const { body } = await request(app).get("/jumplings").expect(200);
     expect(body).toEqual([]);
   });
 
-  it("should respond correctly to POST with valid json", async () => {
+  it("should create a jumpling in response to a valid POST request", async () => {
     const newJumpling = { name: "Jumpling" };
     const { body } = await request(app)
       .post("/jumplings")
@@ -32,7 +32,14 @@ describe("/jumplings", () => {
     await request(app).post("/jumplings").expect(400);
   });
 
-  it("should GET a single jumpling", async () => {
+  it("should GET an array of jumplings", async () => {
+    const { body: arrayOfJumplings } = await request(app)
+      .get("/jumplings")
+      .expect(200);
+    expect(Array.isArray(arrayOfJumplings)).toEqual(true);
+  });
+
+  it("should GET a single jumpling when given a /:name", async () => {
     const expectedJumpling = { id: 1, name: "Jumpling" };
     const { body: actualJumpling } = await request(app)
       .get("/jumplings/Jumpling")
