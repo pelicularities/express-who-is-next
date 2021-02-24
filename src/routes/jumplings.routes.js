@@ -54,4 +54,20 @@ router.post("/", (req, res, next) => {
   }
 });
 
+router.put("/:id", (req, res, next) => {
+  const updatedJumpling = {
+    id: req.jumpling.id,
+    ...req.body,
+  };
+  const validation = validateJumpling(updatedJumpling);
+  if (validation.error) {
+    const error = new Error(validation.error.details[0].message);
+    error.statusCode = 422;
+    next(error);
+  } else {
+    jumplings[req.jumplingIndex] = updatedJumpling;
+    res.status(200).json(jumplings[req.jumplingIndex]);
+  }
+});
+
 module.exports = router;

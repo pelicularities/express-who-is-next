@@ -20,22 +20,16 @@ describe("/jumplings", () => {
 
   it("should reject POST requests with invalid names", async () => {
     const newJumpling = { name: 12345 };
-    const { body } = await request(app)
-      .post("/jumplings")
-      .send(newJumpling)
-      .expect(422);
+    await request(app).post("/jumplings").send(newJumpling).expect(422);
   });
 
   it("should reject POST requests without names", async () => {
     const newJumpling = { nickname: "Joey" };
-    const { body } = await request(app)
-      .post("/jumplings")
-      .send(newJumpling)
-      .expect(422);
+    await request(app).post("/jumplings").send(newJumpling).expect(422);
   });
 
   it("should reject POST requests without json", async () => {
-    const response = await request(app).post("/jumplings").expect(400);
+    await request(app).post("/jumplings").expect(400);
   });
 
   it("should GET a single jumpling", async () => {
@@ -47,8 +41,33 @@ describe("/jumplings", () => {
   });
 
   it("should return 404 to GET requests for jumplings that don't exist", async () => {
+    await request(app).get("/jumplings/3141592654").expect(404);
+  });
+
+  it("should update a jumpling in response to a valid PUT request", async () => {
+    const updatedJumpling = { name: "Dumpling" };
     const { body: actualJumpling } = await request(app)
-      .get("/jumplings/3141592654")
-      .expect(404);
+      .put("/jumplings/1")
+      .send(updatedJumpling)
+      .expect(200);
+    expect(actualJumpling).toMatchObject(updatedJumpling);
+
+    const { body: retrievedJumpling } = await request(app)
+      .get("/jumplings/1")
+      .expect(200);
+    expect(retrievedJumpling).toMatchObject(updatedJumpling);
+  });
+
+  it("should not update a jumpling in response to an invalid PUT request", async () => {
+    const updatedJumpling = { name: 31415 };
+    await request(app).put("/jumplings/1").send(updatedJumpling).expect(422);
+  });
+
+  it("should return 404 to PUT requests for jumplings that don't exist", async () => {
+    await request(app).put("/jumplings/3141592654").send({}).expect(404);
+  });
+
+  it("should reject PUT requests without json", async () => {
+    await request(app).put("/jumplings/1").expect(400);
   });
 });
