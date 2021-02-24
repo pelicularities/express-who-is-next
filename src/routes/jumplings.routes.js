@@ -15,9 +15,26 @@ const validateJumpling = (jumpling) => {
 const jumplings = [];
 let nextId = 1;
 
+// PARAM CALLBACKS
+router.param("id", (req, res, next, id) => {
+  const jumpling = jumplings.find((jumpling) => jumpling.id === parseInt(id));
+  if (!jumpling) {
+    const error = new Error("Jumpling not found!");
+    error.statusCode = 404;
+    next(error);
+  }
+  req.jumpling = jumpling;
+  req.jumplingIndex = jumplings.indexOf(jumpling);
+  next();
+});
+
 // ROUTES
 router.get("/", (req, res) => {
   res.status(200).send(jumplings);
+});
+
+router.get("/:id", (req, res) => {
+  res.status(200).send(req.jumpling);
 });
 
 router.post("/", (req, res, next) => {
