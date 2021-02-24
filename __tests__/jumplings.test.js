@@ -35,7 +35,7 @@ describe("/jumplings", () => {
   it("should GET a single jumpling", async () => {
     const expectedJumpling = { id: 1, name: "Jumpling" };
     const { body: actualJumpling } = await request(app)
-      .get("/jumplings/1")
+      .get("/jumplings/Jumpling")
       .expect(200);
     expect(actualJumpling).toEqual(expectedJumpling);
   });
@@ -53,7 +53,7 @@ describe("/jumplings", () => {
     expect(actualJumpling).toMatchObject(updatedJumpling);
 
     const { body: retrievedJumpling } = await request(app)
-      .get("/jumplings/1")
+      .get("/jumplings/Dumpling")
       .expect(200);
     expect(retrievedJumpling).toMatchObject(updatedJumpling);
   });
@@ -77,10 +77,18 @@ describe("/jumplings", () => {
       .delete("/jumplings/1")
       .expect(200);
     expect(actualJumpling).toMatchObject(deletedJumpling);
-    await request(app).get("/jumplings/1").expect(404);
+    await request(app).get("/jumplings/Jumpling").expect(404);
   });
 
   it("should return 404 to DELETE requests for jumplings that don't exist", async () => {
     await request(app).delete("/jumplings/3141592654").expect(404);
   });
 });
+
+// describe("/jumplings/presenter", () => {
+//   it("should return a random jumpling", async () => {
+//     const { body: randomJumpling } = await request(app)
+//       .get("/jumplings/presenter")
+//       .expect(200);
+//   });
+// });
