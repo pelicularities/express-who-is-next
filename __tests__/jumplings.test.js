@@ -45,4 +45,10 @@ describe("/jumplings", () => {
       .expect(200);
     expect(actualJumpling).toEqual(expectedJumpling);
   });
+
+  it("should return 404 to GET requests for jumplings that don't exist", async () => {
+    const { body: actualJumpling } = await request(app)
+      .get("/jumplings/3141592654")
+      .expect(404);
+  });
 });
