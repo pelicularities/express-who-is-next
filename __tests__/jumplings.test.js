@@ -14,7 +14,7 @@ describe("/jumplings", () => {
       .send(newJumpling)
       .expect(201);
     expect(body).toMatchObject(newJumpling);
-    const { allJumplings } = await request(app).get("/jumplings");
+    const { body: allJumplings } = await request(app).get("/jumplings");
     expect(allJumplings.length).toEqual(1);
   });
 

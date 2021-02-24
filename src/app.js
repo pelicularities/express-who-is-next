@@ -1,6 +1,25 @@
+const { request } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
+
+// MIDDLEWARE
+const requireJsonContent = (req, res, next) => {
+  if (req.headers["content-type"] !== "application/json") {
+    const error = new Error("No application/json, no cigar");
+    error.statusCode = 400;
+    next(error);
+  } else {
+    next();
+  }
+};
+
+app.post("/*", requireJsonContent, (req, res, next) => {
+  next();
+});
+app.put("/*", requireJsonContent, (req, res, next) => {
+  next();
+});
 
 // ROUTERS
 const jumplingsRouter = require("./routes/jumplings.routes");
@@ -19,6 +38,11 @@ app.get("/", (req, res) => {
     6: "---------------------------",
     7: "GET    /jumplings/presenter",
   });
+});
+
+// ERROR HANDLERS
+app.use((error, req, res, next) => {
+  res.status(error.statusCode).send(error.message);
 });
 
 module.exports = app;
