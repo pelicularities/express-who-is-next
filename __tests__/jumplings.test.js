@@ -37,4 +37,12 @@ describe("/jumplings", () => {
   it("should reject POST requests without json", async () => {
     const response = await request(app).post("/jumplings").expect(400);
   });
+
+  it("should GET a single jumpling", async () => {
+    const expectedJumpling = { id: 1, name: "Jumpling" };
+    const { body: actualJumpling } = await request(app)
+      .get("/jumplings/1")
+      .expect(200);
+    expect(actualJumpling).toEqual(expectedJumpling);
+  });
 });
