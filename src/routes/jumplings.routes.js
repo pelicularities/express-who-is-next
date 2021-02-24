@@ -22,10 +22,11 @@ router.param("id", (req, res, next, id) => {
     const error = new Error("Jumpling not found!");
     error.statusCode = 404;
     next(error);
+  } else {
+    req.jumpling = jumpling;
+    req.jumplingIndex = jumplings.indexOf(jumpling);
+    next();
   }
-  req.jumpling = jumpling;
-  req.jumplingIndex = jumplings.indexOf(jumpling);
-  next();
 });
 
 // ROUTES
@@ -68,6 +69,12 @@ router.put("/:id", (req, res, next) => {
     jumplings[req.jumplingIndex] = updatedJumpling;
     res.status(200).json(jumplings[req.jumplingIndex]);
   }
+});
+
+router.delete("/:id", (req, res, next) => {
+  const deletedJumpling = jumplings[req.jumplingIndex];
+  jumplings.splice(req.jumplingIndex, 1);
+  res.status(200).json(deletedJumpling);
 });
 
 module.exports = router;

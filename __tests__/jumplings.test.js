@@ -70,4 +70,17 @@ describe("/jumplings", () => {
   it("should reject PUT requests without json", async () => {
     await request(app).put("/jumplings/1").expect(400);
   });
+
+  it("should DELETE a jumpling", async () => {
+    const deletedJumpling = { name: "Dumpling" };
+    const { body: actualJumpling } = await request(app)
+      .delete("/jumplings/1")
+      .expect(200);
+    expect(actualJumpling).toMatchObject(deletedJumpling);
+    await request(app).get("/jumplings/1").expect(404);
+  });
+
+  it("should return 404 to DELETE requests for jumplings that don't exist", async () => {
+    await request(app).delete("/jumplings/3141592654").expect(404);
+  });
 });
