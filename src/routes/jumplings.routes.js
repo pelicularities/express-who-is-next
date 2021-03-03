@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Jumpling = require("../models/jumpling.model");
+const protectRoute = require("../middleware/protectRoute");
 
 // PARAM CALLBACKS
 router.param("name", async (req, res, next, name) => {
-  const jumpling = await Jumpling.findOne({ name: name });
+  const jumpling = await Jumpling.findOne({ name });
   if (!jumpling) {
     const error = new Error("Jumpling not found!");
     error.statusCode = 404;
@@ -49,7 +50,7 @@ router.get("/:name", (req, res) => {
   res.status(200).send(req.jumpling);
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", protectRoute, async (req, res, next) => {
   try {
     const newJumpling = await Jumpling.create(req.body);
     if (newJumpling) {
@@ -61,7 +62,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", protectRoute, async (req, res, next) => {
   try {
     const updatedJumpling = await Jumpling.findByIdAndUpdate(
       req.jumplingId,
@@ -77,9 +78,9 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", protectRoute, async (req, res) => {
   try {
-    const deletedJumpling = await Jumpling.findByIdAndDelete(req.jumplingId);
+    await Jumpling.findByIdAndDelete(req.jumplingId);
     res.status(200).json(req.jumpling);
   } catch (error) {
     next(error);

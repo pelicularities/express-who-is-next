@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
@@ -25,9 +26,11 @@ app.put("/*", requireJsonContent, (req, res, next) => {
 // ROUTERS
 const jumplingsRouter = require("./routes/jumplings.routes");
 const usersRouter = require("./routes/users.routes");
+const loginRouter = require("./routes/login.routes");
 
 app.use("/jumplings", jumplingsRouter);
 app.use("/users", usersRouter);
+app.use("/", loginRouter);
 
 // ROUTES - ./
 app.get("/", (req, res) => {

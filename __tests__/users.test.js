@@ -1,6 +1,5 @@
 const request = require("supertest");
 const app = require("../src/app");
-const User = require("../src/models/user.model");
 const bcrypt = require("bcryptjs");
 const dbHandlers = require("../test/dbHandler");
 
@@ -8,6 +7,7 @@ beforeAll(async () => {
   await dbHandlers.connect();
 });
 afterAll(async () => {
+  await dbHandlers.clearDatabase();
   await dbHandlers.closeDatabase();
 });
 
