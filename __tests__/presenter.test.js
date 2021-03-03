@@ -3,10 +3,10 @@ const app = require("../src/app");
 const Jumpling = require("../src/models/jumpling.model");
 const dbHandlers = require("../test/dbHandler");
 const jumplings = [
-  { id: 1, name: "Boon Xian" },
-  { id: 2, name: "Grace" },
-  { id: 3, name: "Melvin" },
-  { id: 4, name: "Nix" },
+  { name: "Boon Xian" },
+  { name: "Grace" },
+  { name: "Melvin" },
+  { name: "Nix" },
 ];
 beforeAll(async () => {
   await dbHandlers.connect();

@@ -1,6 +1,8 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 // MIDDLEWARE
 const requireJsonContent = (req, res, next) => {
@@ -22,8 +24,10 @@ app.put("/*", requireJsonContent, (req, res, next) => {
 
 // ROUTERS
 const jumplingsRouter = require("./routes/jumplings.routes");
+const usersRouter = require("./routes/users.routes");
 
 app.use("/jumplings", jumplingsRouter);
+app.use("/users", usersRouter);
 
 // ROUTES - ./
 app.get("/", (req, res) => {
