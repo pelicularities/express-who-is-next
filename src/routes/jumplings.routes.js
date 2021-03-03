@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Jumpling = require("../models/jumpling.model");
 const protectRoute = require("../middleware/protectRoute");
+const jumplingsController = require("../controllers/jumplings.controller");
 
 // PARAM CALLBACKS
 router.param("name", async (req, res, next, name) => {
@@ -30,19 +31,13 @@ router.param("id", async (req, res, next, id) => {
 });
 
 // ROUTES
-router.get("/presenter", async (req, res) => {
-  const jumplings = await Jumpling.find({});
-  const numberOfJumplings = jumplings.length;
-  if (!numberOfJumplings) {
-    res.status(200).send("No jumplings available...");
-  } else {
-    const randomNumber = Math.floor(Math.random() * numberOfJumplings);
-    res.status(200).send(jumplings[randomNumber]);
-  }
+router.get("/presenter", async (req, res, next) => {
+  const presenter = await jumplingsController.getPresenter(next);
+  res.status(200).send(presenter);
 });
 
-router.get("/", async (req, res) => {
-  const jumplings = await Jumpling.find({});
+router.get("/", async (req, res, next) => {
+  const jumplings = await jumplingsController.findAll(next);
   res.status(200).send(jumplings);
 });
 
@@ -51,40 +46,25 @@ router.get("/:name", (req, res) => {
 });
 
 router.post("/", protectRoute, async (req, res, next) => {
-  try {
-    const newJumpling = await Jumpling.create(req.body);
-    if (newJumpling) {
-      res.status(201).json(newJumpling);
-    }
-  } catch (error) {
-    error.statusCode = 422;
-    next(error);
-  }
+  const newJumpling = await jumplingsController.createOne(req.body, next);
+  res.status(201).send(newJumpling);
 });
 
 router.put("/:id", protectRoute, async (req, res, next) => {
-  try {
-    const updatedJumpling = await Jumpling.findByIdAndUpdate(
-      req.jumplingId,
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (updatedJumpling) {
-      res.status(200).json(updatedJumpling);
-    }
-  } catch (error) {
-    error.statusCode = 422;
-    next(error);
-  }
+  const updatedJumpling = await jumplingsController.findByIdAndUpdate(
+    req.jumplingId,
+    req.body,
+    next
+  );
+  res.status(200).send(updatedJumpling);
 });
 
-router.delete("/:id", protectRoute, async (req, res) => {
-  try {
-    await Jumpling.findByIdAndDelete(req.jumplingId);
-    res.status(200).json(req.jumpling);
-  } catch (error) {
-    next(error);
-  }
+router.delete("/:id", protectRoute, async (req, res, next) => {
+  const deletedJumpling = await jumplingsController.findByIdAndDelete(
+    req.jumplingId,
+    next
+  );
+  res.status(200).json(deletedJumpling);
 });
 
 module.exports = router;
