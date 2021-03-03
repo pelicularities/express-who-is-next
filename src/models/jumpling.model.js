@@ -7,7 +7,7 @@ const jumplingSchema = new Schema({
     required: true,
     minlength: 3,
     unique: true,
-    validate: /[A-Za-z]{3,}/,
+    match: /[A-Za-z]{3,}/,
   },
 });
 

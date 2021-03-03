@@ -8,8 +8,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     minlength: 3,
-
-    validation: /[A-Za-z]{3,}/,
+    match: /[A-Za-z]{3,}/,
   },
   password: {
     type: String,
