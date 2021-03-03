@@ -1,22 +1,19 @@
 const request = require("supertest");
 const app = require("../src/app");
-
-beforeAll(() => {
-  const jumplings = [
-    { id: 1, name: "Boon Xian" },
-    { id: 2, name: "Grace" },
-    { id: 3, name: "Melvin" },
-    { id: 4, name: "Nix" },
-  ];
-  jumplings.forEach(async (jumpling) => {
-    await request(app).post("/jumplings").send(jumpling);
-  });
+const Jumpling = require("../src/models/jumpling.model");
+const dbHandlers = require("../test/dbHandler");
+const jumplings = [
+  { id: 1, name: "Boon Xian" },
+  { id: 2, name: "Grace" },
+  { id: 3, name: "Melvin" },
+  { id: 4, name: "Nix" },
+];
+beforeAll(async () => {
+  await dbHandlers.connect();
+  await Jumpling.create(jumplings);
 });
-
-afterAll(() => {
-  [1, 2, 3, 4].forEach(async (id) => {
-    await request(app).delete(`/jumplings/${id}`);
-  });
+afterAll(async () => {
+  await dbHandlers.closeDatabase();
 });
 
 describe("/jumplings/presenter", () => {
@@ -24,7 +21,7 @@ describe("/jumplings/presenter", () => {
     const { body: randomJumpling } = await request(app)
       .get("/jumplings/presenter")
       .expect(200);
-    expect(randomJumpling).toHaveProperty("id");
+    expect(randomJumpling).toHaveProperty("_id");
     expect(randomJumpling).toHaveProperty("name");
   });
 });

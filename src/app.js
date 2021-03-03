@@ -1,4 +1,3 @@
-const { request } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -43,7 +42,7 @@ app.get("/", (req, res) => {
 // ERROR HANDLERS
 app.use((error, req, res, next) => {
   error.statusCode = error.statusCode || 500;
-  // console.log(error);
+  console.log(error);
   res.status(error.statusCode).send(error.message);
 });
 
