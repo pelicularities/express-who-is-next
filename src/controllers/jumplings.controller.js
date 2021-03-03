@@ -17,7 +17,11 @@ const getPresenter = async (next) => {
 
 const findOneByName = async (name, next) => {
   try {
-    return await Jumpling.findOne({ name });
+    const jumpling = await Jumpling.findOne({ name });
+    if (jumpling) return jumpling;
+    const error = new Error("Jumpling not found!");
+    error.statusCode = 404;
+    next(error);
   } catch (error) {
     next(error);
   }
@@ -46,12 +50,10 @@ const findByIdAndUpdate = async (id, body, next) => {
       new: true,
       runValidators: true,
     });
-    if (!updatedJumpling) {
-      const error = new Error("Jumpling not found");
-      error.statusCode = 404;
-      throw error;
-    }
-    return updatedJumpling;
+    if (updatedJumpling) return updatedJumpling;
+    const error = new Error("Jumpling not found");
+    error.statusCode = 404;
+    next(error);
   } catch (error) {
     error.statusCode = 422;
     next(error);
@@ -60,7 +62,15 @@ const findByIdAndUpdate = async (id, body, next) => {
 
 const findByIdAndDelete = async (id, next) => {
   try {
-    return await Jumpling.findByIdAndDelete(id);
+    const deletedJumpling = await Jumpling.findByIdAndDelete(id);
+    if (!deletedJumpling) {
+      const error = new Error("Jumpling not found");
+      error.statusCode = 404;
+      error.surprise = "HERE I AM";
+      throw error;
+    } else {
+      return deletedJumpling;
+    }
   } catch (error) {
     next(error);
   }

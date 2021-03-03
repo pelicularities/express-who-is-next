@@ -152,6 +152,7 @@ describe("/jumplings", () => {
   });
 
   it("should return 404 to DELETE requests for jumplings that don't exist", async () => {
+    console.log("LOOoOOOOOOOOOOOOK HEREEEEEEEEEEEEEEEEEEEEEe");
     await request(app)
       .delete("/jumplings/603ddcc33237ca2baa869cbd")
       .set("Cookie", `token=${token}`)
