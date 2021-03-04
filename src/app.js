@@ -49,7 +49,6 @@ app.get("/", (req, res) => {
 // ERROR HANDLERS
 app.use((error, req, res, next) => {
   error.statusCode = error.statusCode || 500;
-  console.log("do we get here?", error.statusCode);
   res.status(error.statusCode).send(error.message);
 });
 
