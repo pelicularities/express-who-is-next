@@ -34,7 +34,9 @@ router.put("/:id", protectRoute, async (req, res, next) => {
     req.body,
     next
   );
+  console.log("UPDATE: before controller response");
   res.status(200).send(updatedJumpling);
+  console.log("UPDATE: Is this code reachable?");
 });
 
 router.delete("/:id", protectRoute, async (req, res, next) => {
@@ -42,7 +44,11 @@ router.delete("/:id", protectRoute, async (req, res, next) => {
     req.params.id,
     next
   );
-  if (deletedJumpling) res.status(200).send(deletedJumpling);
+  if (deletedJumpling) {
+    console.log("DELETE: before controller response");
+    res.status(200).send(deletedJumpling);
+    console.log("DELETE: Is this code reachable?");
+  }
 });
 
 module.exports = router;

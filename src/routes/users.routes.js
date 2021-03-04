@@ -7,8 +7,6 @@ router.post("/", async (req, res, next) => {
   try {
     const user = new User(req.body);
     const newUser = await user.save();
-    console.log(user);
-    console.log(newUser);
     if (newUser) {
       res.status(201).send(newUser);
     }

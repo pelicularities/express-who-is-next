@@ -89,6 +89,7 @@ describe("/jumplings", () => {
 
   describe("PUT, happy and unhappy paths", () => {
     it("should update a jumpling in response to a valid PUT request", async () => {
+      console.log("UPDATE, happy path");
       const updatedJumpling = { name: "Dumpling" };
       const {
         body: { _id: jumplingId },
@@ -107,6 +108,7 @@ describe("/jumplings", () => {
     });
 
     it("should reject unauthorised PUT requests", async () => {
+      console.log("UPDATE, unhappy, unauthorised");
       const updatedJumpling = { name: "Dumpling" };
       const {
         body: { _id: jumplingId },
@@ -118,6 +120,7 @@ describe("/jumplings", () => {
     });
 
     it("should not update a jumpling in response to an invalid PUT request", async () => {
+      console.log("UPDATE, unhappy, invalid data");
       const updatedJumpling = { name: 31415 };
       const {
         body: { _id: jumplingId },
@@ -130,7 +133,8 @@ describe("/jumplings", () => {
     });
 
     it("should return 404 to PUT requests for jumplings that don't exist", async () => {
-      await request(app)
+      console.log("UPDATE, unhappy, 404");
+      const { body } = await request(app)
         .put("/jumplings/603ddcc33237ca2baa869cbd")
         .send({})
         .set("Cookie", `token=${token}`)
@@ -138,12 +142,14 @@ describe("/jumplings", () => {
     });
 
     it("should reject PUT requests without json", async () => {
-      await request(app).put("/jumplings/1").expect(400);
+      console.log("UPDATE, unhappy, no json");
+      await request(app).put("/jumplings/603ddcc33237ca2baa869cbd").expect(400);
     });
   });
 
   describe("DELETE, happy and unhappy paths", () => {
     it("should DELETE a jumpling", async () => {
+      console.log("DELETE, happy");
       const deletedJumpling = { name: "Dumpling" };
       const { _id: jumplingID } = await Jumpling.findOne(deletedJumpling);
       const { body: actualJumpling } = await request(app)
@@ -155,13 +161,15 @@ describe("/jumplings", () => {
     });
 
     it("should reject unauthorised DELETE requests", async () => {
+      console.log("DELETE, unauthorised");
       const deletedJumpling = await Jumpling.create({ name: "Dumpling" });
       const { _id: jumplingID } = await Jumpling.findOne(deletedJumpling);
       await request(app).delete(`/jumplings/${jumplingID}`).expect(401);
     });
 
     it("should return 404 to DELETE requests for jumplings that don't exist", async () => {
-      await request(app)
+      console.log("DELETE, unhappy");
+      const { body } = await request(app)
         .delete("/jumplings/603ddcc33237ca2baa869cbd")
         .set("Cookie", `token=${token}`)
         .expect(404);

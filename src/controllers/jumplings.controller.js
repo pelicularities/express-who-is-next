@@ -71,14 +71,10 @@ const findByIdAndUpdate = async (id, body, next) => {
 const findByIdAndDelete = async (id, next) => {
   try {
     const deletedJumpling = await Jumpling.findByIdAndDelete(id);
-    if (!deletedJumpling) {
-      const error = new Error("Jumpling not found");
-      error.statusCode = 404;
-      error.surprise = "HERE I AM";
-      next(error);
-    } else {
-      return deletedJumpling;
-    }
+    if (deletedJumpling) return deletedJumpling;
+    const error = new Error("Jumpling not found");
+    error.statusCode = 404;
+    next(error);
   } catch (error) {
     next(error);
   }
