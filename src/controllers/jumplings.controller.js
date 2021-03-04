@@ -67,7 +67,7 @@ const findByIdAndDelete = async (id, next) => {
       const error = new Error("Jumpling not found");
       error.statusCode = 404;
       error.surprise = "HERE I AM";
-      throw error;
+      next(error);
     } else {
       return deletedJumpling;
     }
