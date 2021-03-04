@@ -9,6 +9,10 @@ const jumplingSchema = new Schema({
     unique: true,
     match: /[A-Za-z]{3,}/,
   },
+  called: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Jumpling = mongoose.model("Jumpling", jumplingSchema);

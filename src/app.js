@@ -49,8 +49,6 @@ app.get("/", (req, res) => {
 // ERROR HANDLERS
 app.use((error, req, res, next) => {
   error.statusCode = error.statusCode || 500;
-  console.log(error.surprise);
-  console.log(error.statusCode);
   res.status(error.statusCode).send(error.message);
 });
 

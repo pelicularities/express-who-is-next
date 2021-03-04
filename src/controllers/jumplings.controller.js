@@ -2,14 +2,22 @@ const Jumpling = require("../models/jumpling.model");
 
 const getPresenter = async (next) => {
   try {
-    const jumplings = await Jumpling.find({});
-    const numberOfJumplings = jumplings.length;
-    if (!numberOfJumplings) {
-      return "No jumplings available...";
-    } else {
-      const randomNumber = Math.floor(Math.random() * numberOfJumplings);
-      return jumplings[randomNumber];
+    const numberOfJumplings = await Jumpling.estimatedDocumentCount();
+    if (!numberOfJumplings) return "No jumplings available...";
+
+    const numberOfUncalledJumplings = await Jumpling.countDocuments({
+      called: false,
+    });
+    if (!numberOfUncalledJumplings) {
+      await Jumpling.updateMany({}, { called: false });
     }
+
+    const uncalledJumplings = await Jumpling.find({ called: false });
+    const randomNumber = Math.floor(Math.random() * uncalledJumplings.length);
+    const unluckyJumpling = uncalledJumplings[randomNumber];
+    unluckyJumpling.called = true;
+    unluckyJumpling.save();
+    return unluckyJumpling;
   } catch (error) {
     next(error);
   }
